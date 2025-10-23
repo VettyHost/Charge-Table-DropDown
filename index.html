@@ -196,7 +196,6 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Package Name</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Charge Type</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Charge Description</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check Name</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jurisdictions Searched</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Names Searched</th>
@@ -205,6 +204,7 @@
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Passthrough Fee</th>
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Discount</th>
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Package Price</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
                             </tr>
                         </thead>
                         <tbody id="chargeTableBody" class="bg-white divide-y divide-gray-200">
@@ -225,19 +225,29 @@
         // Define the common package name
         const packageName = 'OHS_Checks';
 
-        // Updated charge data: underscore removed from Charge Description, but kept in Fee (Ohs_vendor fee).
-        // Added 'package' property to store the name.
+        // --- UPDATED CHARGE DATA ---
+        // 'description' now uses the full sentence.
+        // 'type' uses the underscore separated charge name.
+        // 'fee' is now a numerical value and included in the Grand Total calculation.
         const chargeData = [
-            { package: packageName, type: 'Package', description: 'Initial Package Fee', fee: 'N/A', check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 245.00 },
-            { package: packageName, type: 'Check', description: 'Ohs vendor fee', fee: 'Ohs_vendor fee', check: 'DrivingLicense', jurisdictions: 'Los Angeles County, CA\nNew York County, NY', names: 'John Doe', completed: '10/17/2025', price: 5.00, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
-            { package: packageName, type: 'Verification', description: 'Additional check', fee: 'Additional_check', check: 'EmploymentVerification', jurisdictions: 'Harris County, TX\nKing County, WA', names: 'N/A', completed: '10/17/2025', price: 5.60, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
-            { package: packageName, type: 'Verification', description: 'Renewal price', fee: 'Additional_cost', check: 'EducationVerification', jurisdictions: 'Fulton County, GA', names: 'N/A', completed: '10/17/2025', price: 2.60, passthrough: 1.30, discount: 0.00, packagePrice: 0.00 },
+            // Package Price Entry
+            { package: packageName, type: 'package_price', description: 'package price of the applicant', fee: 0.00, check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 245.00 },
+            
+            // New Fee Entries (with sample numerical fees)
+            { package: packageName, type: 'setup_fee', description: 'setup fee for client', fee: 15.00, check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
+            { package: packageName, type: 'implementation_fee', description: 'implementation fee for client', fee: 25.50, check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
+            { package: packageName, type: 'integration_fee', description: 'integration fee for client', fee: 8.00, check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
+            { package: packageName, type: 'platform_fee', description: 'platform fee for client', fee: 4.25, check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
+            { package: packageName, type: 'other_fee', description: 'other fee for client', fee: 1.50, check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
+            
+            // Check Entry with an additional check fee
+            { package: packageName, type: 'additional_check', description: 'additional SO added for check', fee: 5.60, check: 'Criminal_Record', jurisdictions: 'Harris County, TX\nKing County, WA', names: 'Jane Smith', completed: '10/18/2025', price: 5.60, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
         ];
         
-        // Updated table headers to include 'Package Name' as the first column
+        // tableHeaders updated: 'Fee' moved to the end.
         const tableHeaders = [
-            'Package Name', 'Charge Type', 'Charge Description', 'Fee', 'Check Name', 'Jurisdictions Searched', 
-            'Names Searched', 'Completed Date', 'Price', 'Passthrough Fee', 'Discount', 'Package Price'
+            'Package Name', 'Charge Type', 'Charge Description', 'Check Name', 'Jurisdictions Searched', 
+            'Names Searched', 'Completed Date', 'Price', 'Passthrough Fee', 'Discount', 'Package Price', 'Fee' 
         ];
 
         // --- Utility Functions ---
@@ -248,12 +258,14 @@
         // Calculates totals for numeric columns
         const calculateTotals = (data) => {
             return data.reduce((acc, row) => {
+                // Include Fee in the totals calculation
+                acc.fee += row.fee;
                 acc.price += row.price;
                 acc.passthrough += row.passthrough;
                 acc.discount += row.discount;
                 acc.packagePrice += row.packagePrice;
                 return acc;
-            }, { price: 0, passthrough: 0, discount: 0, packagePrice: 0 });
+            }, { fee: 0, price: 0, passthrough: 0, discount: 0, packagePrice: 0 });
         };
 
         // Renders the table body and totals
@@ -266,13 +278,12 @@
                 const formattedJurisdictions = row.jurisdictions.replace(/\n/g, '<br>');
 
                 const tr = document.createElement('tr');
+                // Updated order of <td> elements to match the new header order
                 tr.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.package}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${row.type}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.description}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.fee}</td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">${row.description}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.check}</td>
-                    <!-- Removed whitespace-nowrap here to allow multiple lines -->
                     <td class="px-6 py-4 text-sm text-gray-500">${formattedJurisdictions}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.names}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.completed}</td>
@@ -280,15 +291,17 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(row.passthrough)}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(row.discount)}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold text-right">${formatCurrency(row.packagePrice)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(row.fee)}</td>
                 `;
                 bodyEl.appendChild(tr);
             });
 
-            // The colspan needs to be 8 now (7 previous non-numeric columns + 1 new Package Name column)
+            // Colspan is 7 (Package Name, Charge Type, Charge Description, Check Name, Jurisdictions Searched, Names Searched, Completed Date)
             totalsEl.innerHTML = `
-                <th scope="col" colspan="8" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                <th scope="col" colspan="7" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
                     Grand Totals:
                 </th>
+                <!-- Numeric columns start here in order: Price, Passthrough, Discount, Package Price, Fee -->
                 <th scope="col" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
                     ${formatCurrency(totals.price)}
                 </th>
@@ -300,6 +313,9 @@
                 </th>
                 <th scope="col" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
                     ${formatCurrency(totals.packagePrice)}
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    ${formatCurrency(totals.fee)}
                 </th>
             `;
         };
@@ -313,10 +329,10 @@
 
             // 2. Get Data Rows
             const dataRows = data.map(row => {
-                // Ensure the order matches tableHeaders and includes the new 'package' field
+                // Values updated: 'Fee' moved to the end to match the new tableHeaders order
                 const values = [
-                    row.package, row.type, row.description, row.fee, row.check, row.jurisdictions, // row.jurisdictions contains \n which is ideal for CSV
-                    row.names, row.completed, row.price, row.passthrough, row.discount, row.packagePrice
+                    row.package, row.type, row.description, row.check, row.jurisdictions, 
+                    row.names, row.completed, row.price, row.passthrough, row.discount, row.packagePrice, row.fee
                 ];
                 // Escape values and join them
                 return values.map(v => `"${v}"`).join(separator);
@@ -324,12 +340,24 @@
             
             // 3. Get Totals Row
             const totals = calculateTotals(data);
-            // The colspan is 8 non-numeric columns (7 empty placeholders + 'Grand Totals:')
-            const totalValues = ['', '', '', '', '', '', '', 'Grand Totals:', totals.price, totals.passthrough, totals.discount, totals.packagePrice];
-            const totalsRow = totalValues.map(v => `"${v}"`).join(separator);
-
-
-            const csvString = `${headerRow}\n${dataRows}\n${totalsRow}`;
+            
+            // 7 empty cells for the non-numeric columns
+            const emptyCells = Array(7).fill(''); 
+            
+            // Colspan is 7, so 7 empty cells are followed by the text, which then aligns the numbers to the right.
+            const totalValuesForCSV = [
+                '', '', '', '', '', '', '', // 7 empty cells (for Package Name to Completed Date)
+                'Grand Totals:', // The label
+                totals.price,
+                totals.passthrough,
+                totals.discount,
+                totals.packagePrice,
+                totals.fee // Fee total
+            ];
+            
+            const csvTotalsRow = totalValuesForCSV.map(v => `"${v}"`).join(separator);
+            
+            const csvString = `${headerRow}\n${dataRows}\n${csvTotalsRow}`;
             
             const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
             
