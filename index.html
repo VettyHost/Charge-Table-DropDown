@@ -13,6 +13,30 @@
             font-family: 'Inter', sans-serif;
             background-color: #f4f7f9;
         }
+        /* Modal Backdrop Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50; /* Tailwind z-50 */
+        }
+        /* Modal Container */
+        .modal-content {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 90%;
+            max-height: 90%;
+            width: 80rem; /* Wide enough for the table */
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 <body class="p-8">
@@ -39,67 +63,17 @@
                     </svg>
                     <span>Documents and Disclosures</span>
                 </a>
-            </div>
-        </div>
-
-        <!-- Dynamic Charge Table Section -->
-        <div class="bg-gray-50 p-6 rounded-lg shadow-inner mb-6">
-            <!-- Toggler for the table -->
-            <button id="chargeTableToggle" class="w-full flex justify-between items-center text-left text-lg font-semibold text-gray-700 hover:text-gray-900 focus:outline-none">
-                <span>Charge Table</span>
-                <svg id="toggleIcon" class="h-5 w-5 transform transition-transform duration-200 rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            </button>
-
-            <!-- Table content - initially hidden -->
-            <div id="chargeTableContainer" class="mt-4 hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Charge Type
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Checkname
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Price
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Total
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Third Party Fees
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">additional_check</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">mmr_titer</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$14.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$14.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.00</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">additional_check</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">panel_10</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1.10</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1.10</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.00</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">package_price</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">n/a</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$5.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$5.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Button to open the Charge Table modal -->
+                <button id="chargeTableToggle" class="flex items-center space-x-1 text-blue-600 font-medium hover:text-blue-800 focus:outline-none">
+                    <span>Charge Table</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                        <line x1="15" y1="3" x2="15" y2="21"></line>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="3" y1="15" x2="21" y2="15"></line>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -112,7 +86,7 @@
                 </div>
                 <div>
                     <span class="text-gray-500">Package</span>
-                    <p class="font-medium text-gray-900">Fill on Behalf Check</p>
+                    <p class="font-medium text-gray-900">OHS_Checks</p>
                 </div>
                 <div>
                     <span class="text-gray-500">Department</span>
@@ -189,23 +163,222 @@
         </div>
     </div>
 
+    <!-- Charge Table Modal (Hidden by Default) -->
+    <div id="chargeTableModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-800">Charge Table (Cost Summary) for Tim David</h2>
+                <button id="closeModalButton" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Body: Controls and Table -->
+            <div class="p-6 overflow-y-auto flex-grow">
+                <!-- Export Control -->
+                <div class="flex justify-end mb-4">
+                    <button id="exportCsvButton" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150">
+                        <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Export to CSV
+                    </button>
+                </div>
+
+                <!-- Table Container -->
+                <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                    <table id="chargeTable" class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Package Name</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Charge Type</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Charge Description</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check Name</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jurisdictions Searched</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Names Searched</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completed Date</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Passthrough Fee</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Discount</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Package Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chargeTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Table rows will be inserted here by JavaScript -->
+                        </tbody>
+                        <tfoot class="bg-gray-100 border-t border-gray-300">
+                            <tr id="chargeTableTotals">
+                                <!-- Totals row will be inserted here by JavaScript -->
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Define the common package name
+        const packageName = 'OHS_Checks';
+
+        // Updated charge data: underscore removed from Charge Description, but kept in Fee (Ohs_vendor fee).
+        // Added 'package' property to store the name.
+        const chargeData = [
+            { package: packageName, type: 'Package', description: 'Initial Package Fee', fee: 'N/A', check: 'N/A', jurisdictions: 'N/A', names: 'N/A', completed: 'N/A', price: 0.00, passthrough: 0.00, discount: 0.00, packagePrice: 245.00 },
+            { package: packageName, type: 'Check', description: 'Ohs vendor fee', fee: 'Ohs_vendor fee', check: 'DrivingLicense', jurisdictions: 'Los Angeles County, CA\nNew York County, NY', names: 'John Doe', completed: '10/17/2025', price: 5.00, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
+            { package: packageName, type: 'Verification', description: 'Additional check', fee: 'Additional_check', check: 'EmploymentVerification', jurisdictions: 'Harris County, TX\nKing County, WA', names: 'N/A', completed: '10/17/2025', price: 5.60, passthrough: 0.00, discount: 0.00, packagePrice: 0.00 },
+            { package: packageName, type: 'Verification', description: 'Renewal price', fee: 'Additional_cost', check: 'EducationVerification', jurisdictions: 'Fulton County, GA', names: 'N/A', completed: '10/17/2025', price: 2.60, passthrough: 1.30, discount: 0.00, packagePrice: 0.00 },
+        ];
+        
+        // Updated table headers to include 'Package Name' as the first column
+        const tableHeaders = [
+            'Package Name', 'Charge Type', 'Charge Description', 'Fee', 'Check Name', 'Jurisdictions Searched', 
+            'Names Searched', 'Completed Date', 'Price', 'Passthrough Fee', 'Discount', 'Package Price'
+        ];
+
+        // --- Utility Functions ---
+
+        // Formats a number as a currency string
+        const formatCurrency = (amount) => `$${amount.toFixed(2)}`;
+
+        // Calculates totals for numeric columns
+        const calculateTotals = (data) => {
+            return data.reduce((acc, row) => {
+                acc.price += row.price;
+                acc.passthrough += row.passthrough;
+                acc.discount += row.discount;
+                acc.packagePrice += row.packagePrice;
+                return acc;
+            }, { price: 0, passthrough: 0, discount: 0, packagePrice: 0 });
+        };
+
+        // Renders the table body and totals
+        const renderTable = (data, bodyEl, totalsEl) => {
+            const totals = calculateTotals(data);
+            bodyEl.innerHTML = '';
+            
+            data.forEach(row => {
+                // Convert newline characters to <br> for multi-line display in HTML
+                const formattedJurisdictions = row.jurisdictions.replace(/\n/g, '<br>');
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.package}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${row.type}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.description}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.fee}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.check}</td>
+                    <!-- Removed whitespace-nowrap here to allow multiple lines -->
+                    <td class="px-6 py-4 text-sm text-gray-500">${formattedJurisdictions}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.names}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.completed}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(row.price)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(row.passthrough)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formatCurrency(row.discount)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold text-right">${formatCurrency(row.packagePrice)}</td>
+                `;
+                bodyEl.appendChild(tr);
+            });
+
+            // The colspan needs to be 8 now (7 previous non-numeric columns + 1 new Package Name column)
+            totalsEl.innerHTML = `
+                <th scope="col" colspan="8" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Grand Totals:
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    ${formatCurrency(totals.price)}
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    ${formatCurrency(totals.passthrough)}
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    ${formatCurrency(totals.discount)}
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    ${formatCurrency(totals.packagePrice)}
+                </th>
+            `;
+        };
+
+        // Handles the CSV Export functionality
+        const exportTableToCSV = (data, filename) => {
+            const separator = ',';
+            
+            // 1. Get Headers
+            const headerRow = tableHeaders.map(h => `"${h}"`).join(separator);
+
+            // 2. Get Data Rows
+            const dataRows = data.map(row => {
+                // Ensure the order matches tableHeaders and includes the new 'package' field
+                const values = [
+                    row.package, row.type, row.description, row.fee, row.check, row.jurisdictions, // row.jurisdictions contains \n which is ideal for CSV
+                    row.names, row.completed, row.price, row.passthrough, row.discount, row.packagePrice
+                ];
+                // Escape values and join them
+                return values.map(v => `"${v}"`).join(separator);
+            }).join('\n');
+            
+            // 3. Get Totals Row
+            const totals = calculateTotals(data);
+            // The colspan is 8 non-numeric columns (7 empty placeholders + 'Grand Totals:')
+            const totalValues = ['', '', '', '', '', '', '', 'Grand Totals:', totals.price, totals.passthrough, totals.discount, totals.packagePrice];
+            const totalsRow = totalValues.map(v => `"${v}"`).join(separator);
+
+
+            const csvString = `${headerRow}\n${dataRows}\n${totalsRow}`;
+            
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            
+            // Trigger download
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        };
+
+        // --- Initialization and Event Listeners ---
+
         document.addEventListener('DOMContentLoaded', () => {
             const toggleButton = document.getElementById('chargeTableToggle');
-            const tableContainer = document.getElementById('chargeTableContainer');
-            const toggleIcon = document.getElementById('toggleIcon');
+            const modal = document.getElementById('chargeTableModal');
+            const closeModalButton = document.getElementById('closeModalButton');
+            const exportCsvButton = document.getElementById('exportCsvButton');
+            const tableBody = document.getElementById('chargeTableBody');
+            const tableTotals = document.getElementById('chargeTableTotals');
 
+            // 1. Initial Table Render (inside the now-hidden modal)
+            renderTable(chargeData, tableBody, tableTotals);
+
+
+            // 2. Modal Open/Close Logic
             toggleButton.addEventListener('click', () => {
-                const isHidden = tableContainer.classList.contains('hidden');
-                if (isHidden) {
-                    tableContainer.classList.remove('hidden');
-                    toggleIcon.classList.remove('rotate-0');
-                    toggleIcon.classList.add('rotate-180');
-                } else {
-                    tableContainer.classList.add('hidden');
-                    toggleIcon.classList.remove('rotate-180');
-                    toggleIcon.classList.add('rotate-0');
+                modal.classList.remove('hidden');
+            });
+
+            closeModalButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside the content
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
                 }
+            });
+
+            // 3. CSV Export Logic
+            exportCsvButton.addEventListener('click', () => {
+                exportTableToCSV(chargeData, 'Charge_Summary_Tim_David.csv');
             });
         });
     </script>
